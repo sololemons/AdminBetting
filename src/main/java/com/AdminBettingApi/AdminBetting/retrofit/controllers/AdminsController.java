@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admins")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class AdminsController {
     private static final Logger logger = LoggerFactory.getLogger(AdminsController.class);
     TransactionServiceClient transactionService = new TransactionServiceClient();

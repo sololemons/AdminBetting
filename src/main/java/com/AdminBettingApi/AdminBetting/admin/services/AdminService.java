@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Transactional
+
 public class AdminService {
 
     private final AdminRepository adminRepository;

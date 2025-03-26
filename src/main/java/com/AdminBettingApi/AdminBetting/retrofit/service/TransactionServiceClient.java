@@ -260,6 +260,43 @@ return Collections.emptyList();
 
         return Collections.emptyList();
     }
+    public List<TransactionHistory> fetchTransactionsById(Long id) {
+        Call<List<TransactionHistory>> call = apiClient.getTransactionsByTransactionId(id);
+
+        try {
+            Response<List<TransactionHistory>> response = call.execute();
+            String apiUrl = call.request().url().toString();
+            if (response.isSuccessful() && response.body() != null) {
+                logger.info("Successfully fetched {} transactions. Received data: {} . It Fetched from ApiUrl: {} . With Code : {} " , response.body().size(),id,apiUrl,response.code());
+                return response.body();
+            } else {
+                logger.error("Failed to fetch transactions. Response code: {}, Error: {}",
+                        response.code(), response.errorBody());
+            }
+        } catch (IOException e) {
+            logger.error("API call failed due to network error: {}", e.getMessage());
+        }
+
+        return Collections.emptyList();
+    }
+    public List<TransactionHistory> searchTransactionsByTransactionRef(String transactionRef) {
+        Call<List<TransactionHistory>> call = apiClient.getTransactionsByTransactionRef(transactionRef);
+
+        try {
+            Response<List<TransactionHistory>> response = call.execute();
+            if (response.isSuccessful() && response.body() != null) {
+                logger.info("Successfully searched and fetched {} transactions.", response.body().size());
+                return response.body();
+            } else {
+                logger.error("Failed to search and fetch transactions. Response code: {}, Error: {}",
+                        response.code(), response.errorBody());
+            }
+        } catch (IOException e) {
+            logger.error("API call failed due to network error: {}", e.getMessage());
+        }
+
+        return Collections.emptyList();
+    }
 
 
 

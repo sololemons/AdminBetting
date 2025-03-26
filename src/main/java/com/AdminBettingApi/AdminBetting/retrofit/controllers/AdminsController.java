@@ -93,5 +93,16 @@ public class AdminsController {
     public List<Bets> getBetsById(@RequestParam Long id){
         return transactionService.searchBetsById(id);
 }
+    @GetMapping("/get/transactions")
+    public List<TransactionHistory> getTransactionsById(@RequestParam Long id){
+        return transactionService.fetchTransactionsById(id);
+
+    }
+    @GetMapping("/search/transactionRef")
+    public List<TransactionHistory> searchTransactionRef(@RequestParam String transactionRef){
+        return transactionService.searchTransactionsByTransactionRef(transactionRef);
+    }
 
 }
+
+

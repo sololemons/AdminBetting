@@ -8,4 +8,5 @@ public class TransactionHistory {
     private String phoneNumber;
     private String transactionRef;
     private String transactionType;
+    private String transactionDate;
 }

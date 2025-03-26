@@ -48,6 +48,10 @@ public interface AdminApiClient {
     );
     @GET("/games/all")
     Call <List<GamesDto>> getAllGames();
+    @GET("/transaction/get/id")
+    Call <List<TransactionHistory>> getTransactionsByTransactionId(@Query("id") Long id);
+    @GET("/transaction/search/transactionRef")
+    Call <List<TransactionHistory>> getTransactionsByTransactionRef(@Query("transactionRef") String transactionRef);
 
 
 }

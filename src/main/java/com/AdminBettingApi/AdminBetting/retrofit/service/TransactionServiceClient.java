@@ -1,16 +1,13 @@
 package com.AdminBettingApi.AdminBetting.retrofit.service;
-
 import com.AdminBettingApi.AdminBetting.retrofit.models.*;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestParam;
 import retrofit2.Call;
 import retrofit2.Response;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class TransactionServiceClient {
     private static final Logger logger = LoggerFactory.getLogger(TransactionServiceClient.class);
@@ -20,12 +17,14 @@ public class TransactionServiceClient {
         this.apiClient = RetrofitClient.getClient().create(AdminApiClient.class);
     }
 
+
+
     public List<TransactionHistory> fetchAllTransactionHistory() {
         Call<List<TransactionHistory>> call = apiClient.getAllTransactions();
         try {
             Response<List<TransactionHistory>> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
-                logger.info(" Successfully fetched {} transactions.", response.body().size());
+                logger.info(" Successfully fetched {} transactions. The Response : {}, The Response code : {}", response.body().size(), response.body(), response.code());
                 return response.body();
             } else {
                 logger.error("Failed to fetch transactions. Response code: {}, Error: {}",
@@ -37,37 +36,13 @@ public class TransactionServiceClient {
         return null;
     }
 
-    public List<TransactionHistory> fetchTransactionHistory(String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid Authorization header");
-        }
-
-        logger.info("Sending Authorization Header to Betting API: {}", authHeader);
-
-        Call<List<TransactionHistory>> call = apiClient.getTransactions(authHeader);
-
-        try {
-            Response<List<TransactionHistory>> response = call.execute();
-            if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} transactions from Betting API.", response.body().size());
-                return response.body();
-            } else {
-                logger.error(" Failed to fetch transaction Response code: {}, Error: {}",
-                        response.code(), response.errorBody());
-            }
-        } catch (IOException e) {
-            logger.error(" Betting API call failed due to network error: {}", e.getMessage());
-        }
-        return null;
-    }
-
 
     public List<Bets> fetchBets() {
         Call<List<Bets>> call = apiClient.getBets();
         try {
             Response<List<Bets>> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} bets.", response.body().size());
+                logger.info("Successfully fetched {} bets. The Response : {} . With the response Code : {}", response.body().size(),response.body(), response.code());
                 return response.body();
             } else {
                 logger.error("Failed to fetch bets. Response code: {}, Error: {}",
@@ -79,60 +54,11 @@ public class TransactionServiceClient {
         return null;
     }
 
-    public Double fetchBetCount() {
-        Call<Double> call = apiClient.getBetsCount();
-        try {
-            Response<Double> response = call.execute();
-            if (response.isSuccessful() && response.body() != null) {
-                double count = response.body();
-                logger.info("Successfully fetched {} bet count.", count);
-                return count;
-            } else {
-                logger.error("Failed to fetch betCounts. Response code: {}, Error: {}",
-                        response.code(), response.errorBody());
-            }
-        } catch (IOException e) {
-            logger.error("API call  failed due to network error: {}", e.getMessage());
-        }
-        return 0.0;
-    }
 
-    public Double fetchPossibleWinSum() {
-        Call<Double> call = apiClient.getPossibleWins();
-        try {
-            Response<Double> response = call.execute();
-            if (response.isSuccessful() && response.body() != null) {
-                double count = response.body();
-                logger.info("Successfully fetched {} possible wins summation.", count);
-                return count;
-            } else {
-                logger.error("Failed to fetch possible wins summation . Response code: {}, Error: {}",
-                        response.code(), response.errorBody());
-            }
-        } catch (IOException e) {
-            logger.error("API  call  failed due to network error: {}", e.getMessage());
-        }
-        return 0.0;
-    }
 
-    public List<BetSlip> fetchBetSlipsByPhoneNumber(String authHeader, Long betId) {
-        Call<List<BetSlip>> call = apiClient.getBetSlipsByUserAndBetId(authHeader, betId);
 
-        try {
-            Response<List<BetSlip>> response = call.execute();
-            if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} bet slips.", response.body().size());
-                return response.body();
-            } else {
-                logger.error("Failed to fetch bet slips. Response code: {}, Error: {}",
-                        response.code(), response.errorBody());
-            }
-        } catch (IOException e) {
-            logger.error("API call failed due to network error: {}", e.getMessage());
-        }
 
-        return Collections.emptyList();
-    }
+
 
     public List<GamesDto> fetchAllGames() {
 
@@ -140,7 +66,7 @@ public class TransactionServiceClient {
         try {
             Response<List<GamesDto>> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} games.", response.body().size());
+                logger.info("Successfully fetched {} games. The Response : {} . With the Response Code :{} ", response.body().size(),response.body(), response.code());
                 return response.body();
             } else {
                 logger.error("Failed to fetch the Games. Response code: {}, Error: {}",
@@ -165,7 +91,7 @@ return Collections.emptyList();
             Response<PageResponse<User>> response = call.execute();
 
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} users.", response.body().getTotalElements());
+                logger.info("Successfully fetched {} users. The Received Parameter was: {} . The Response was :{} . Response Code:  {} ", response.body().getTotalElements(),page,response.body(), response.code());
                 return response.body();
             } else {
                 logger.error("Failed to fetch users. Response Code: {}, Error Body: {}",
@@ -185,8 +111,8 @@ return Collections.emptyList();
             Response<PageResponse<User>> response = call.execute();
 
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} users for phone number: {}",
-                        response.body().getTotalElements(), phoneNumber);
+                logger.info("Successfully fetched {} users for phone number: {} . With Response Code: {} . The response: {}",
+                        response.body().getTotalElements(), phoneNumber,response.code(),response.body());
                 return response.body();
             } else {
                 logger.error("Failed to fetch users by PhoneNumber. Response Code: {}, Error Body: {}",
@@ -206,9 +132,8 @@ return Collections.emptyList();
             Response<User> response = call.execute();
 
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched user with number {} ",
-                   phoneNumber);
-                logger.error("Suceessfully {}",response.body());
+                logger.info("Successfully fetched user with number {} . The Response was : {} . With Response Code : {} ",
+                   phoneNumber, response.body(), response.code());
                 return response.body();
             } else {
                 logger.error("Failed to fetch user by PhoneNumber. Response Code: {}, Error Body: {}",
@@ -228,8 +153,8 @@ return Collections.emptyList();
             Response<List<Bets>> response = call.execute();
 
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} bets for Id: {}",
-                        id);
+                logger.info("Successfully fetched {} bets for Id: {}, The Bets : {}, With Response Code: {}",
+                        response.body().size(), id, response.body(), response.code());
                 return response.body();
             } else {
                 logger.error("Failed to fetch bets by Id. Response Code: {}, Error Body: {}",
@@ -248,7 +173,7 @@ return Collections.emptyList();
         try {
             Response<List<BetSlip>> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully fetched {} bet slips.", response.body().size());
+                logger.info("Successfully fetched {} bet slips. The Received Param was: {} . With The Response Code {} . It Returned BetSlips : {} .", response.body().size(),betId,response.code(),response.body());
                 return response.body();
             } else {
                 logger.error("Failed to fetch betSlips. Response code: {}, Error: {}",
@@ -270,7 +195,7 @@ return Collections.emptyList();
                 logger.info("Successfully fetched {} transactions. Received data: {} . It Fetched from ApiUrl: {} . With Code : {} " , response.body().size(),id,apiUrl,response.code());
                 return response.body();
             } else {
-                logger.error("Failed to fetch transactions. Response code: {}, Error: {}",
+                logger.error("Failed to fetch transactions. With Response code: {}, Error: {}",
                         response.code(), response.errorBody());
             }
         } catch (IOException e) {
@@ -279,13 +204,13 @@ return Collections.emptyList();
 
         return Collections.emptyList();
     }
-    public List<TransactionHistory> searchTransactionsByTransactionRef(String transactionRef) {
+    public List<TransactionHistory> searchTransactionsByTransactionRef(String transactionRef){
         Call<List<TransactionHistory>> call = apiClient.getTransactionsByTransactionRef(transactionRef);
 
         try {
             Response<List<TransactionHistory>> response = call.execute();
             if (response.isSuccessful() && response.body() != null) {
-                logger.info("Successfully searched and fetched {} transactions.", response.body().size());
+                logger.info("Successfully searched and fetched {} transactions. The Param Received was :{} . With Response Code {} .", response.body().size(),transactionRef,response.code());
                 return response.body();
             } else {
                 logger.error("Failed to search and fetch transactions. Response code: {}, Error: {}",
@@ -297,9 +222,42 @@ return Collections.emptyList();
 
         return Collections.emptyList();
     }
+    public List<User> getUsers(){
+        Call<List<User>> call = apiClient.getAllUsers();
 
+        try {
+            Response<List<User>> response = call.execute();
+            if (response.isSuccessful() && response.body() != null) {
+                logger.info("Successfully  fetched {} users.  With Response Code {} .", response.body().size(),response.code());
+                return response.body();
+            } else {
+                logger.error("Failed to search users . Response code: {}, Error: {}",
+                        response.code(), response.errorBody());
+            }
+        } catch (IOException e) {
+            logger.error("API call failed due to network error: {}", e.getMessage());
+        }
 
+        return Collections.emptyList();
+    }
+    public List<BetSlip> getAllBetsSlips(){
+        Call<List<BetSlip>> call = apiClient.getAllBetsSlips();
 
+        try {
+            Response<List<BetSlip>> response = call.execute();
+            if (response.isSuccessful() && response.body() != null) {
+                logger.info("Successfully  fetched {} betSlips.  With Response Code {} .", response.body().size(),response.code());
+                return response.body();
+            } else {
+                logger.error("Failed to search Betslips . Response code: {}, Error: {}",
+                        response.code(), response.errorBody());
+            }
+        } catch (IOException e) {
+            logger.error("API call failed due to network error: {}", e.getMessage());
+        }
+
+        return Collections.emptyList();
+    }
 
 
 }

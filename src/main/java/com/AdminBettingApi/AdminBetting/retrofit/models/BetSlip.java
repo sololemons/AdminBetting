@@ -11,4 +11,5 @@ public class BetSlip {
     private String pick;
     private double odds;
     private String status;
+    private String betSlipPlacedOn;
 }

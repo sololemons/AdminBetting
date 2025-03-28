@@ -16,6 +16,8 @@ public interface AdminApiClient {
 
     @GET("/transaction/all")
     Call <List<TransactionHistory>> getAllTransactions();
+    @GET("users/alls")
+    Call <List<User>> getAllUsers();
     @GET("/users/all")
     Call<PageResponse<User>> getAllUsers(
             @Query("page") int page,
@@ -52,6 +54,6 @@ public interface AdminApiClient {
     Call <List<TransactionHistory>> getTransactionsByTransactionId(@Query("id") Long id);
     @GET("/transaction/search/transactionRef")
     Call <List<TransactionHistory>> getTransactionsByTransactionRef(@Query("transactionRef") String transactionRef);
-
-
+    @GET("/betslip/all")
+    Call<List<BetSlip>>getAllBetsSlips();
 }

@@ -10,6 +10,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -27,6 +30,7 @@ private  final RoleRepository roleRepository;
         adminDto.setAdminEmail(admin.getAdminEmail());
         adminDto.setPhoneNumber(admin.getPhoneNumber());
         adminDto.setRole(admin.getRoles().getName());
+        adminDto.setAdminId(admin.getAdminId());
         return adminDto;
     }
 
@@ -50,5 +54,22 @@ private  final RoleRepository roleRepository;
 
         Admin savedAdmin = adminRepository.save(newAdmin);
         return convertToDto(savedAdmin);
+    }
+
+    public AdminDto deleteAdmin(Long adminId) {
+        Optional<Admin> adminOptional = adminRepository.findById(adminId);
+
+        if (adminOptional.isPresent()) {
+            Admin admin = adminOptional.get();
+            adminRepository.deleteById(adminId);
+            return convertToDto(admin);
+        } else {
+            throw new UserNotFoundException("Admin with Admin Id " + adminId + " not found.");
+        }
+    }
+
+    public List<AdminDto> getAllAdmins() {
+     List<Admin> admins = adminRepository.findAll();
+     return admins.stream().map(this::convertToDto).toList();
     }
 }

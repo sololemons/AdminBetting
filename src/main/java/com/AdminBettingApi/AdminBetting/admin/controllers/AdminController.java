@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -23,5 +24,15 @@ public class AdminController {
         AdminDto createdAdmin = adminService.createAdmin(adminDto, authHeader);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
     }
+    @DeleteMapping("/delete")
+    public ResponseEntity<AdminDto> deleteAdmin(@RequestParam Long adminId) {
+        return ResponseEntity.ok(adminService.deleteAdmin(adminId));
+
+    }
+    @GetMapping("/get/all")
+    public ResponseEntity<List<AdminDto>> getAllAdmins() {
+        return ResponseEntity.ok(adminService.getAllAdmins());
+    }
+
 
 }

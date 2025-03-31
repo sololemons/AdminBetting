@@ -2,15 +2,20 @@ package com.AdminBettingApi.AdminBetting.retrofit.controllers;
 
 import com.AdminBettingApi.AdminBetting.retrofit.models.*;
 import com.AdminBettingApi.AdminBetting.retrofit.service.TransactionServiceClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/admins")
-
 public class AdminsController {
-    TransactionServiceClient transactionService = new TransactionServiceClient();
+
+    private final TransactionServiceClient transactionService;
+
+    public AdminsController(TransactionServiceClient transactionService) {
+        this.transactionService = transactionService;
+    }
 
 
     @GetMapping("/fetch/all")

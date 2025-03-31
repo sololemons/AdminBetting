@@ -13,4 +13,5 @@ public class AdminDto {
     private String adminEmail;
     private String phoneNumber;
     private String role;
+    private Long adminId;
 }

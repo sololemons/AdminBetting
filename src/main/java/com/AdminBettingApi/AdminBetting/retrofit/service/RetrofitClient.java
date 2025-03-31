@@ -1,16 +1,23 @@
 package com.AdminBettingApi.AdminBetting.retrofit.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Component
 public class RetrofitClient {
-    private static final String BASE_URL = "http://localhost:8080/";
-    private static Retrofit retrofit = null;
+    private final String baseUrl;
+    private Retrofit retrofit;
 
-    public static Retrofit getClient() {
+    public RetrofitClient(@Value("${base.url}") String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
